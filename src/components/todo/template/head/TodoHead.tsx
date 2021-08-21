@@ -34,7 +34,7 @@ const TodoHead = () => {
 
   useEffect(() => {
     setInterval(() => {
-        setCurrentTime(prevState => new Date());
+        setCurrentTime(new Date());
     }, 1000);
   }, [])
 
