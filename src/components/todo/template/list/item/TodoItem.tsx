@@ -55,6 +55,10 @@ const Text = styled.div<{ done: boolean }>`
     `}
 `;
 
+const Date = styled.span`
+    margin: 0 5px;
+`
+
 interface TodoItemProps {
   toggleTodo: (id: number) => void;
   removeTodo: (id: number) => void;
@@ -75,6 +79,7 @@ const TodoItem = ({ toggleTodo, removeTodo, todo }: TodoItemProps) => {
         {done && <CheckOutlined />}
       </CheckCircle>
       <Text done={done}>{todo.text}</Text>
+      <Date>목표 : {todo.targetDate}</Date>
       <Remove onClick={handleRemove}>
         <DeleteOutlined />
       </Remove>

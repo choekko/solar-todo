@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { PlusCircleOutlined } from "@ant-design/icons";
+import { DatePicker } from 'antd';
 import { Itodo } from "components/todo/TodoService";
 
 const CircleButton = styled.button<{ open: boolean }>`
@@ -36,9 +37,10 @@ const InsertForm = styled.form`
 `;
 
 const Input = styled.input`
+    margin-right: 20px;
   padding: 12px;
   border: 1px solid #dddddd;
-  width: 100%;
+  width: 90%;
   outline: none;
   font-size: 21px;
   box-sizing: border-box;
@@ -62,10 +64,15 @@ const TodoCreate = ({
 }: TodoCreateProps) => {
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState("");
+  const [targetDate, setTargetDate] = useState("");
 
   const handleToggle = () => setOpen(!open);
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) =>
     setValue(e.target.value);
+
+    const handleDateChange = (e: string) => {
+        setTargetDate(e);
+    }
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault(); // 새로고침 방지
@@ -73,13 +80,20 @@ const TodoCreate = ({
     createTodo({
       id: nextId,
       text: value,
-      done: false
+      done: false,
+      targetDate: targetDate,
     });
     incrementNextId(); // nextId 하나 증가
 
     setValue(""); // input 초기화
     setOpen(false); // open 닫기
   };
+
+  const disabledDate = (current: any) => {
+    const today = new Date();
+    const yesterday = new Date(today.setDate(today.getDate() - 1))
+    return current <= yesterday;
+  }
 
   return (
     <>
@@ -92,9 +106,13 @@ const TodoCreate = ({
             value={value}
           />
 
+          <DatePicker 
+            disabledDate={disabledDate}
+            placeholder="target Date" 
+            onChange={(_, dateString: string) => handleDateChange(dateString)}/>
           <CircleButton onClick={handleToggle} open={open}>
             <PlusCircleOutlined />
-          </CircleButton>
+          </CircleButton>\
         </InsertForm>
       </InsertFormPositioner>
     </>
