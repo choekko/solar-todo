@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { PlusCircleOutlined } from "@ant-design/icons";
-import { DatePicker } from 'antd';
+import { DatePicker, Modal } from 'antd';
 import { Itodo } from "components/todo/TodoService";
+import { useModalState } from "hooks/useModalState";
 
 const CircleButton = styled.button<{ open: boolean }>`
   background: #33bb77;
@@ -65,6 +66,7 @@ const TodoCreate = ({
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState("");
   const [targetDate, setTargetDate] = useState("");
+  const { isModalVisible, showModal, closeModal, modalContents, setModalContents } = useModalState(false);
 
   const handleToggle = () => setOpen(!open);
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) =>
@@ -76,6 +78,16 @@ const TodoCreate = ({
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault(); // 새로고침 방지
+    if (!value.length) {
+        setModalContents("'해야할 일'을 적어주세요!");
+        showModal();
+        return ; 
+    }
+    if (!targetDate.length) {
+        setModalContents("'목표 완수 일자'를 입력해주세요!");
+        showModal();
+        return ;
+    }
 
     createTodo({
       id: nextId,
@@ -105,7 +117,6 @@ const TodoCreate = ({
             onChange={handleChange}
             value={value}
           />
-
           <DatePicker 
             disabledDate={disabledDate}
             placeholder="target Date" 
@@ -115,6 +126,9 @@ const TodoCreate = ({
           </CircleButton>\
         </InsertForm>
       </InsertFormPositioner>
+      <Modal title="내용 입력을 완료해주세요" visible={isModalVisible} onOk={closeModal} onCancel={closeModal}>
+        <p>{modalContents}</p>
+      </Modal>
     </>
   );
 };
