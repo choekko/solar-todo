@@ -66,14 +66,16 @@ const TodoCreate = ({
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState("");
   const [targetDate, setTargetDate] = useState("");
+  const [targetDateMoment, setTargetDateMoment] = useState(undefined);
   const { isModalVisible, showModal, closeModal, modalContents, setModalContents } = useModalState(false);
 
   const handleToggle = () => setOpen(!open);
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) =>
     setValue(e.target.value);
 
-    const handleDateChange = (e: string) => {
+    const handleDateChange = (value: any, e: string) => {
         setTargetDate(e);
+        setTargetDateMoment(value);
     }
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -98,6 +100,8 @@ const TodoCreate = ({
     incrementNextId(); // nextId 하나 증가
 
     setValue(""); // input 초기화
+    setTargetDate(""); // targetDate 초기화
+    setTargetDateMoment(undefined); // targetDateMoment 초기화
     setOpen(false); // open 닫기
   };
 
@@ -119,8 +123,9 @@ const TodoCreate = ({
           />
           <DatePicker 
             disabledDate={disabledDate}
+            value={targetDateMoment}
             placeholder="target Date" 
-            onChange={(_, dateString: string) => handleDateChange(dateString)}/>
+            onChange={(value: any, dateString: string) => handleDateChange(value, dateString)}/>
           <CircleButton onClick={handleToggle} open={open}>
             <PlusCircleOutlined />
           </CircleButton>\
