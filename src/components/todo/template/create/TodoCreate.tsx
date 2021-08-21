@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { PlusCircleOutlined } from "@ant-design/icons";
-import { DatePicker, Modal } from 'antd';
+import { DatePicker, Modal, Button } from 'antd';
 import { Itodo } from "components/todo/TodoService";
 import { useModalState } from "hooks/useModalState";
 
@@ -131,7 +131,17 @@ const TodoCreate = ({
           </CircleButton>\
         </InsertForm>
       </InsertFormPositioner>
-      <Modal title="내용 입력을 완료해주세요" visible={isModalVisible} onOk={closeModal} onCancel={closeModal}>
+      <Modal 
+        title="내용 입력을 완료해주세요" 
+        visible={isModalVisible} 
+        onOk={closeModal} 
+        onCancel={closeModal}
+        footer={[
+            <Button key="close" type="primary" onClick={closeModal}>
+                Close
+            </Button>
+        ]}
+        >
         <p>{modalContents}</p>
       </Modal>
     </>
